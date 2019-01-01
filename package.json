@@ -1,0 +1,23 @@
+{
+  "name": "whats-on-staging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "login": ""
+  },
+  "keywords": [],
+  "author": "Pat Mellon",
+  "license": "ISC",
+  "bin": {
+    "wos": "./index.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "inquirer": "^6.2.1",
+    "jest": "^23.6.0",
+    "minimist": "^1.2.0"
+  }
+}
