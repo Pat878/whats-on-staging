@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
 const fs = require("fs");
+const wos = {
+  userConfigPath: require("os").homedir() + "/.wos/config.json",
+  projectConfig: "./wos.json"
+};
 
 module.exports = args => {
   const { prompt } = require("inquirer");
-  const projectConfig = "./wos.json";
   const branch = args.branch || args.b;
   const commitCount = args.count || args.c;
 
@@ -27,33 +30,31 @@ module.exports = args => {
     }
   ];
 
-  if (fs.existsSync(projectConfig)) {
+  if (fs.existsSync(wos.projectConfig)) {
     createGitLog(commitCount, branch);
   } else {
     prompt(questions).then(answers =>
-      createprojectConfig(answers, commitCount, branch)
+      createProjectConfig(answers, commitCount, branch)
     );
   }
+};
 
-  createprojectConfig = (answers, commitCount, branch) => {
-    fs.writeFile(projectConfig, JSON.stringify(answers, null, 2), function(
-      err
-    ) {
-      if (err) {
-        return console.log(err);
-      }
+createProjectConfig = (answers, commitCount, branch) => {
+  fs.writeFile(wos.projectConfig, JSON.stringify(answers, null, 2), function(
+    err
+  ) {
+    if (err) {
+      return console.log(err);
+    }
 
-      createGitLog(commitCount, branch);
-    });
-  };
+    createGitLog(commitCount, branch);
+  });
 };
 
 postGitLog = (gitLog, branch) => {
   const axios = require("axios");
   const path = require("path");
-  const homedir = require("os").homedir();
-  const wosConfig = homedir + "/.wos/config.json";
-  const accessToken = JSON.parse(fs.readFileSync(wosConfig, "utf8"))
+  const accessToken = JSON.parse(fs.readFileSync(wos.userConfigPath, "utf8"))
     .accessToken;
   const authorizationHeader = {
     headers: {
